@@ -1,0 +1,168 @@
+<html>
+	<head>
+		<title>Star Wars Quiz</title>
+	</head>
+	<body>
+		<center>
+			<div id="divStart">
+				<input type="button" style="width:500px;height:32px;" value="Start" onclick="Start();" />
+			</div>
+			<div id="divQuestions" style="display:none;width:500px">
+				<img id="imgQuestion" src="" width="500" height="400" /><br />
+				<h2 id="lblQuestion"></h2><br />
+				<input type="button" id="btnAnswer1" style="width:500px;height:32px;" onclick="Answer(1);" value="" /><br /><br />
+				<input type="button" id="btnAnswer2" style="width:500px;height:32px;" onclick="Answer(2);" value="" /><br /><br />
+				<input type="button" id="btnAnswer3" style="width:500px;height:32px;" onclick="Answer(3);" value="" /><br /><br />
+				<input type="button" id="btnAnswer4" style="width:500px;height:32px;" onclick="Answer(4);" value="" /><br /><br />
+			</div>
+			<div id="divFinish" style="display:none;">
+				<h2 id="lblResults"></h2>
+			</div>
+		</center>
+		<script>
+			var CurrentQuestion = 0;
+			var Correct = 0;
+			
+			const Questions = 
+				[
+					{
+						"Image": "1.webp",
+						"Question": "Who built C3P0?",
+						"Answer": "1",
+						"Answer1": "Darth Vader",
+						"Answer2": "Luke Skywalker",
+						"Answer3": "Samsung Electronics",
+						"Answer4": "R2D2"
+					},
+					{
+						"Image": "2.webp",
+						"Question": "These intelligent microscopic life forms live inside the cells of all living things and are the source of The Force",
+						"Answer": "3",
+						"Answer1": "Red Blood Cells",
+						"Answer2": "Mini-Midgets (or small people)",
+						"Answer3": "Midi-Chlorians",
+						"Answer4": "COVID-19"
+					},
+					{
+						"Image": "3.webp",
+						"Question": "As a tribute to his Indiana Jones co-creator this Asogian creature appeared in the Galactic Senate",
+						"Answer": "2",
+						"Answer1": "Naʼvi",
+						"Answer2": "E.T.",
+						"Answer3": "Richard Simmons",
+						"Answer4": "Watto"
+					},
+					{
+						"Image": "4.webp",
+						"Question": "This Mandalorian father of Boba Fett was also the genetic source of all Stormtroopers",
+						"Answer": "1",
+						"Answer1": "Jango Fett",
+						"Answer2": "Anakin Skywalker",
+						"Answer3": "Billy-Bob Fett",
+						"Answer4": "That hammerhead looking thing in the cantina"
+					},
+					{
+						"Image": "5.webp",
+						"Question": "She became a princess when she was adopted by Senator Bail and Queen Breha Organa after her birth with a twin brother",
+						"Answer": "3",
+						"Answer1": "Princess Fiona",
+						"Answer2": "Princess Diana",
+						"Answer3": "Princess Leia",
+						"Answer4": "Princess Poopsalot"
+					},
+					{
+						"Image": "6.webp",
+						"Question": "Darth Vader cut off his son's hand, who cut off Darth Vader's hand?",
+						"Answer": "2",
+						"Answer1": "Obi-Wan Kenobi",
+						"Answer2": "Count Dooku",
+						"Answer3": "Yoda",
+						"Answer4": "It was an industrial accident while manufacturing hotdogs"
+					},
+					{
+						"Image": "7.webp",
+						"Question": "Anakin Skywalker was never one of the following",
+						"Answer": "1",
+						"Answer1": "A Jedi Master",
+						"Answer2": "A man who wore the same cape day after day",
+						"Answer3": "A character played by an actor with no acting talents",
+						"Answer4": "A winner in pod race"
+					},
+					{
+						"Image": "8.webp",
+						"Question": "He was once known by this name before becoming a slave of the dark side of the force called Darth Sidious or The Emperor",
+						"Answer": "3",
+						"Answer1": "That crazy My Pillow Guy",
+						"Answer2": "Jabba the Hutt",
+						"Answer3": "Sheev Palpatine",
+						"Answer4": "Kylo Ren"
+					},
+					{
+						"Image": "9.webp",
+						"Question": "Who was Anakin Skywalker's father?",
+						"Answer": "2",
+						"Answer1": "Jeffrey Epstein",
+						"Answer2": "Darth Plagueis who manipulated the force to create life",
+						"Answer3": "He does not have one, just like Baby Jesus",
+						"Answer4": "Philip J Fry III"
+					},
+					{
+						"Image": "10.webp",
+						"Question": "Which movie failed to edit out a blooper where a stormtrooper accidently hit his head on the doorway?",
+						"Answer": "4",
+						"Answer1": "Empire Strikes Back",
+						"Answer2": "Attack of the Clones",
+						"Answer3": "Revenge of the Jedi",
+						"Answer4": "A New Hope"
+					},
+					{
+						"Image": "11.webp",
+						"Question": "The Millennium Falcon made the Kessel Run in less then 12 parsecs, why is this impossible?",
+						"Answer": "3",
+						"Answer1": "It would require travel faster then the speed of light",
+						"Answer2": "They were way too heavy with the 7 foot 5 inch Chewbacca",
+						"Answer3": "A parsec is a unit of distance, not time",
+						"Answer4": "The speedometer only went up to 10 parsecs"
+					},
+					{
+						"Image": "12.webp",
+						"Question": "Luke and Han disguised as stormtroopers escorted Chewbacca to cell block 1138. What is the significance of 1138?",
+						"Answer": "1",
+						"Answer1": "George Lucas's first film was called THX 1138",
+						"Answer2": "They captured him just before midnight, at 11:38pm",
+						"Answer3": "George Lucas was born on the 38th day in the month of November",
+						"Answer4": "1138 is the minimum number of calories Chewbacca needs in order to survive"
+					}
+				]
+			
+			function PopulateQuestion() {			
+				document.getElementById('imgQuestion').src = Questions[CurrentQuestion].Image;
+				document.getElementById('lblQuestion').innerText = Questions[CurrentQuestion].Question;
+				document.getElementById('btnAnswer1').value = Questions[CurrentQuestion].Answer1;
+				document.getElementById('btnAnswer2').value = Questions[CurrentQuestion].Answer2;
+				document.getElementById('btnAnswer3').value = Questions[CurrentQuestion].Answer3;
+				document.getElementById('btnAnswer4').value = Questions[CurrentQuestion].Answer4;
+			}
+			
+			function Answer(Selected) {
+				if (Selected == Questions[CurrentQuestion].Answer) {
+					Correct++;
+				}
+				CurrentQuestion++;
+				if (CurrentQuestion == Questions.length) {
+					document.getElementById('divQuestions').style.display = 'none';
+					document.getElementById('divFinish').style.display = '';
+					document.getElementById('lblResults').innerText = Correct + '/12 Correct';
+				} else {
+					PopulateQuestion();
+				}
+			}
+			
+			function Start() {
+				document.getElementById('divStart').style.display = 'none';
+				document.getElementById('divQuestions').style.display = '';
+				PopulateQuestion();
+			}
+		</script>
+	</body>
+</html>
